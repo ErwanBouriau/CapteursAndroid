@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 public class Exercice4 extends AppCompatActivity {
     private SensorManager sensorManager;
+    private Sensor accelerometre;
     private TextView textView1;
     private TextView textView2;
 
@@ -53,9 +54,20 @@ public class Exercice4 extends AppCompatActivity {
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        Sensor accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(accelerometre != null) {
             sensorManager.registerListener(mSensorEventListener, accelerometre, SensorManager.SENSOR_DELAY_NORMAL);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(mSensorEventListener);
     }
 }

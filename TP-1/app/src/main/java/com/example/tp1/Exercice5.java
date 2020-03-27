@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class Exercice5 extends AppCompatActivity {
     private SensorManager sensorManager;
+    private Sensor accelerometre;
     private static final float SHAKE_THRESHOLD = 1.7F;
     boolean lightOn = false;
 
@@ -56,19 +57,28 @@ public class Exercice5 extends AppCompatActivity {
         }
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        Sensor accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if(accelerometre != null) {
-            sensorManager.registerListener(mSensorEventListener, accelerometre, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-
-        //getting the camera manager and camera id
         mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
             mCameraId = mCameraManager.getCameraIdList()[0];
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(accelerometre != null) {
+            sensorManager.registerListener(mSensorEventListener, accelerometre, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(mSensorEventListener);
     }
 
     public void flashLight(boolean status) {

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 public class Exercice3 extends AppCompatActivity {
     private SensorManager sensorManager;
+    private Sensor accelerometre;
     private LinearLayout linear;
 
     final SensorEventListener mSensorEventListener = new SensorEventListener() {
@@ -49,9 +50,20 @@ public class Exercice3 extends AppCompatActivity {
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        Sensor accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometre = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(accelerometre != null) {
             sensorManager.registerListener(mSensorEventListener, accelerometre, SensorManager.SENSOR_DELAY_NORMAL);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(mSensorEventListener);
     }
 }
